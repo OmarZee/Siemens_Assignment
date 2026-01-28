@@ -77,3 +77,91 @@ class Librarian(Account):
     def removeMember(self, memberID):
         # interact with library
         return True
+    
+class Book:
+    def __init__(self, ISBN, title, author, subject, publicationDate):
+        self.ISBN = ISBN
+        self.title = title
+        self.author = author
+        self.subject = subject
+        self.publicationDate = publicationDate
+        self.totalCopies = 0
+        self.availableCopies = 0
+    
+    def getBookInfo(self):
+        return f"ISBN {self.ISBN}, Title {self.title}, Author {self.author}"
+        
+
+class BookItem:
+    def __init__(self, barcode, rackNo, status, book, price):
+        self.barcode = barcode
+        self.rackNo = rackNo
+        self.status = status
+        self.book = book                    # reference Book object
+        self.dueDate = None
+        self.price = price
+
+    def isAvailable(self):
+        # check if available
+        return self.status == "Available"
+    
+    def checkout(self):
+        # edit available quantity
+        if self.isAvailable():
+            self.status = "Checked Out"
+            return True
+        return False
+    
+    def returnBook(self):
+        # edit available quantity
+        if self.status == "Checked Out":
+            self.status = "Available"
+            self.dueDate = None
+            return True
+        return False
+    
+class Lending:
+    def __init__(self, lendingID, memberID, bookItemBarcode, creationDate, dueDate):
+        self.lendingID = lendingID
+        self.memberID = memberID
+        self.bookItemBarcode = bookItemBarcode
+        self.creationDate = creationDate
+        self.dueDate = dueDate
+        self.returnDate = None                  # will be set when book is returned
+
+    def calculateFine(self):
+        # calculate fine by checking retrnDate > dueDate and do overdue * fine per day
+        return 0.0
+
+
+class Reservation:
+    def __init__(self, reservationID, memberID, bookID, creationDate, status):
+        self.reservationID = reservationID
+        self.memberID = memberID
+        self.bookID = bookID
+        self.creationDate = creationDate
+        self.status = status
+
+    def cancel(self):
+        # cancel reservation
+        if self.status == "Pending":
+            self.status = "Cancelled"
+            return True
+        return False
+
+    def notify(self):
+        # send notifcation 
+        return True
+    
+
+class Fine:
+    def __init__(self, fineID, memberID, amount):
+        self.fineID = fineID
+        self.memberID = memberID
+        self.amount = amount
+
+    def collectFine(self):
+        # collect calculated fine 
+        return True
+    
+
