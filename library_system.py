@@ -1,5 +1,16 @@
 from abc import ABC
 
+
+# File Split Plan:
+#     - accounts.py: Account, Member, Librarian
+#     - books.py: Book, BookItem
+#     - management.py: Lending, Reservation, Fine
+#     - notifcations.py: Notification
+#     - library.py: Library
+
+
+
+
 class Account(ABC):
     def __init__(self, name, address, email, phoneNumber, barcode):
         self.name = name
