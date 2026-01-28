@@ -51,3 +51,29 @@ class Member(Account):
         #check
         return False
     
+
+class Librarian(Account):
+    def __init__(self, name, address, email, phoneNumber, barcode, employeeID):
+        super().__init__(name,  address, email, phoneNumber, barcode)
+
+        self.employeeID = employeeID
+
+    def addBook(self, book):
+        # interact with library
+        return True
+
+    def issueBook(self, bookItem, member):
+        #create lending record
+        return True
+    
+    def removeBook(self, bookID):
+        # interact with library
+        return True
+    
+    def addMember(self, member):
+        # interact with library
+        return True
+    
+    def removeMember(self, memberID):
+        # interact with library
+        return True
