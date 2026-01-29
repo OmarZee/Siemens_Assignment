@@ -95,22 +95,58 @@ class Librarian(Account):                                                       
 
         self.employeeID = employeeID
 
-    def addBook(self, book):
+    def addBook(self, book, library):
         # interact with library
-        return True
+        return library.addBook(book)
 
-    def issueBook(self, bookItem, member):
+    def issueBook(self, bookItem, member, library):
         #create lending record
+        from management import Lending
+        from datetime import datetime, timedelta
+
+        if not bookItem.isAvailable():
+            return False
+
+        if not member.canCheckout():
+            return False
+        
+        bookItem.checkout()
+
+        creation_date = datetime.now()
+        due_date = creation_date + timedelta(days=member.maxBorrowDays)
+
+        lendingID = f"L-{member.memberID}-{bookItem.barcode}"
+        lending = Lending(lendingID=lendingID, memberID=member.memberID, bookItemBarcode=bookItem.barcode, creationDate=creation_date.strftime("%Y-%m-%d"), dueDate=due_date.strftime("%Y-%m-%d"))
+
+        bookItem.dueDate = due_date.strftime("%Y-%m-%d")
+
+        member.checkoutBook(lending)
+
+        if bookItem.book:
+            bookItem.book.availableCopies -= 1
+
         return True
     
-    def removeBook(self, bookID):
+    def removeBook(self, bookID, library):
         # interact with library
-        return True
+
+        for book in library.books:
+            if book.ISBN == bookID:
+                library.books.remove(book)
+                return True
+
+        return False
     
     def addMember(self, member):
         # interact with library
-        return True
+        return library.registerMember(member)
     
-    def removeMember(self, memberID):
+    def removeMember(self, memberID, library):
         # interact with library
-        return True
+        for member in library.members:
+            if member.memberID == memberID:
+                if member.totalBooksCheckedOut == 0:
+                    library.members.remove(member)
+                    return True
+                return False
+        return False
