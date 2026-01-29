@@ -1,7 +1,7 @@
 from abc import ABC
 from datetime import datetime, timedelta
 
-class Account(ABC):
+class Account(ABC):                         # abstract class since this should not be modified
     def __init__(self, name, address, email, phoneNumber, barcode):
         self.name = name
         self.address = address

@@ -1,4 +1,9 @@
+from datetime import datetime, timedelta
+
 class Lending:
+
+    FINE_RATE = 100.0
+
     def __init__(self, lendingID, memberID, bookItemBarcode, creationDate, dueDate):
         self.lendingID = lendingID
         self.memberID = memberID
@@ -9,6 +14,23 @@ class Lending:
 
     def calculateFine(self):
         # calculate fine by checking retrnDate > dueDate and do overdue * fine per day
+        if self.returnDate == None:
+            current_date = datetime.now()
+            due = datetime.strptime(self.dueDate, "%Y-%m-%d")
+
+            if current_date > due:
+                days_overdue = (current_date - due).days
+                return days_overdue * self.FINE_RATE
+            return 0.0
+        
+        return_date = datetime.strptime(self.returnDate, "%Y-%m-%d")
+        due_date = datetime.strptime(self.dueDate, "%Y-%m-%d")
+
+        if return_date > due_date:
+            days_overdue = (return_date - due_date).days
+            fine_amount = days_overdue * self.FINE_PER_DAY
+            return fine_amount
+        
         return 0.0
 
 
