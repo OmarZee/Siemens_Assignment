@@ -19,6 +19,8 @@ class Book:
             return False
         self.bookItems.append(bookItem)
         self.totalCopies += 1
+        if bookItem.isAvailable():
+            self.availableCopies += 1
 
         return True
     
@@ -92,7 +94,7 @@ class BookItem:
         return False
     
     def isOverdue(self):
-        if self.status == "Checked Out":
+        if self.status == "Checked Out" and self.dueDate:
             current_date = datetime.now()
             due = datetime.strptime(self.dueDate, "%Y-%m-%d")
             return current_date > due

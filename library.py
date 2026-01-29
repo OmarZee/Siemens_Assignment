@@ -46,6 +46,12 @@ class Library:
         self.members.append(member)
         return True
     
-    def scanBarcode(self):
-        # scan
-        return "Scanned_Barcode"
+    def scanBarcode(self, barcode):
+        for bookItem in self.bookItems:
+            if bookItem.barcode == barcode:
+                return bookItem
+            
+        for member in self.members:
+            if member.barcode == barcode:
+                return member
+        return None

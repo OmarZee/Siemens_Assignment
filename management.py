@@ -28,7 +28,7 @@ class Lending:
 
         if return_date > due_date:
             days_overdue = (return_date - due_date).days
-            fine_amount = days_overdue * self.FINE_PER_DAY
+            fine_amount = days_overdue * self.FINE_RATE
             return fine_amount
         
         return 0.0
@@ -49,8 +49,13 @@ class Reservation:
             return True
         return False
 
-    def notify(self):
+    def notify(self, member, book):
         # send notifcation 
+        from notification import Notification
+
+        notificationID = f"N-{self.reservationID}"
+        notification = Notification.createReservationAvailableNotification(notificationID=notificationID, member=member, bookTitle=book.title)
+        notification.send()
         return True
     
 
@@ -59,17 +64,15 @@ class Fine:
         self.fineID = fineID
         self.memberID = memberID
         self.amount = amount
+        self.paid = False
+        self.paymentDate = None
+        
+
 
     def collectFine(self):
         # collect calculated fine 
-        return True
-    
-class Notification:
-    def __init__(self, notificationID, message, recipient):
-        self.notificationID = notificationID
-        self.message = message
-        self.recipient = recipient
-    
-    def send(self):
-        # send notification
+        if self.paid:
+            return False
+        self.paid = True
+        self.paymentDate = datetime.now().strftime("%Y-%m-%d")
         return True

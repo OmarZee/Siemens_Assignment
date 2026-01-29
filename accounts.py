@@ -30,7 +30,7 @@ class Member(Account):                                                          
             lending.returnDate = datetime.now().strftime("%Y-%m-%d")            # setting return date to now and converting it to a string
             if lending in self.lendings:
                 self.lendings.remove(lending)                                   # remove book from list of lent books 
-            self.totalBooksCheckedOut -= 1
+            self.totalBooksCheckedOut -= 1                 
             return True
         return False
     
@@ -83,9 +83,10 @@ class Member(Account):                                                          
         current_date = datetime.now()
 
         for lending in self.lendings:
-            due_date = datetime.strptime(lending.dueDate, "%Y-%m-%d")
-            if current_date > due_date:
-                return True
+            if lending.returnDate == None:
+                due_date = datetime.strptime(lending.dueDate, "%Y-%m-%d")
+                if current_date > due_date:
+                    return True
         return False
     
 
@@ -122,8 +123,8 @@ class Librarian(Account):                                                       
 
         member.checkoutBook(lending)
 
-        if bookItem.book:
-            bookItem.book.availableCopies -= 1
+        # if bookItem.book:
+        #     bookItem.book.availableCopies -= 1            This is already handled by calling checkout() method
 
         return True
     
@@ -137,7 +138,7 @@ class Librarian(Account):                                                       
 
         return False
     
-    def addMember(self, member):
+    def addMember(self, member, library):
         # interact with library
         return library.registerMember(member)
     

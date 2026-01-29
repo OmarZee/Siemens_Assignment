@@ -32,14 +32,17 @@ class Notification:
         self.notificationType = notificationType
         return True
     
+    @staticmethod
     def createReservationAvailableNotification(notificationID, member, bookTitle):
         message = f"The book {bookTitle} you reserved is available!"
         notification = Notification(notificationID, message, member)
         notification.setNotificationType(Notification.TYPE_RESERVATION_AVAILABLE)
         return notification
     
+    @staticmethod
     def createOverdueNotification(notificationID, member, bookTitle, daysOverdue):
         message = f"{member.name}, your borrowed book {bookTitle} is overdue by {daysOverdue} days. Please return it and pay your fine"
 
         notification = Notification(notificationID, message, member)
         notification.setNotificationType(Notification.TYPE_OVERDUE)
+        return notification
